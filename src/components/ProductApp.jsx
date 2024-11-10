@@ -1,48 +1,20 @@
 import { useEffect, useState } from "react"
+import { listProduct } from "../services/ProductService";
+import { ProductGrid } from "./ProductGrid";
 
-const initProducts = [
-    {
-        name: "Monitor Samsung 65",
-        price: 500,
-        description: "El monitor es increible"
-    },
-    {
-        name: "Iphone 14",
-        price: 800,
-        description: "El telefono es bueno"
-    },
-];
 
 export const ProductApp =() => {
-const [products, setProducts] = useState(initProducts);
+const [products, setProducts] = useState([]);
 
 useEffect(() => {
-    setProducts(initProducts);
+    const result = listProduct();
+    setProducts(result);
 },[])
 
     return(
         <>
-        <h1>hola mundo react</h1>
-        <table>
-            <thead>
-                <tr>
-                    <th>name</th>
-                    <th>description</th>
-                    <th>price</th>
-                </tr>
-            </thead>
-            <tbody>
-                {products.map( product =>{
-                    return(
-                        <tr key={product.name}>
-                            <td>{product.name}</td>
-                            <td>{product.description}</td>
-                            <td>{product.price}</td>
-                        </tr>
-                    )
-                })}
-            </tbody>
-        </table>
+        <h1>Productos</h1>
+        <ProductGrid products={products}/>
         </>
     )
 }
