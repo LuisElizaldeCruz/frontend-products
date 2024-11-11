@@ -1,33 +1,75 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
-export const ProductForm = () => {
+const initialDataForm = {
+    id: 0,
+    name: '',
+    description: '',
+    price: ''
+}
+// eslint-disable-next-line react/prop-types
+export const ProductForm = ({ productSelected, handlerAdd }) => {
 
-    const initialData = {
-        name: "",
-        description: "",
-        price: ""
-    }
-    const [form, setForm] = useState(initialData);
+    const [form, setForm] = useState(initialDataForm);
 
-    const { name, description, price} = form //destructuracion del objeto
+    const {id, name, description, price } = form;
+
+    useEffect(() => {
+        setForm(productSelected);
+    }, [productSelected]);
 
     return (
-        <form>
-            <input placeholder="name"
-                name="name"
-                value={name}
-                onChange={ }
-            />
-            <input placeholder="description"
-                name="description"
-                value={description}
-                onChange={ }
-            />
-            <input placeholder="price"
-                name="price"
-                value={price}
-                onChange={ }
-            />
+        <form onSubmit={(event) => {
+            event.preventDefault();
+
+            if (!name || !description || !price) {
+                alert('Debe de completar los datos del formulario!')
+                return;
+            }
+            // console.log(form);
+            handlerAdd(form);
+            setForm(initialDataForm);
+        }}>
+            <div>
+                <input
+                    placeholder="Name"
+                    className="form-control my-3 w-75"
+                    name="name"
+                    value={name}
+                    onChange={(event) => setForm({
+                        ...form,
+                        name: event.target.value
+                    })}
+                />
+            </div>
+            <div>
+                <input
+                    placeholder="Description"
+                    className="form-control my-3 w-75"
+                    name="description"
+                    value={description}
+                    onChange={(event) => setForm({
+                        ...form,
+                        description: event.target.value
+                    })}
+                />
+            </div>
+            <div>
+                <input
+                    placeholder="Price"
+                    className="form-control my-3 w-75"
+                    name="price"
+                    value={price}
+                    onChange={(event) => setForm({
+                        ...form,
+                        price: event.target.value
+                    })}
+                />
+            </div>
+            <div>
+                <button type="submit" className="btn btn-primary">
+                    {id> 0 ? 'Update': 'Create'}
+                </button>
+            </div>
         </form>
     )
 }
