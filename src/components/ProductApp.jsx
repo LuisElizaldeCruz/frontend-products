@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { listProduct } from "../services/ProductService";
+import { findAll } from "../services/ProductService";
 import { ProductGrid } from "./ProductGrid";
 import { PropTypes } from 'prop-types';
 import { ProductForm } from "./ProductForm";
@@ -12,12 +12,17 @@ export const ProductApp = ({ title }) => {
         id: 0,
         name: '',
         description: '',
-        price: ''
+        price: '' 
+
     })
 
-    useEffect(() => {
-        const result = listProduct();
+    const getproducts = async () => {
+        const result = await findAll();
         setProducts(result);
+    }
+
+    useEffect(() => {
+        getproducts();
     }, []);
 
     const handlerAddProduct = (product) => {
