@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { findAll } from "../services/ProductService";
+import { create, findAll, remove, update } from "../services/ProductService";
 import { ProductGrid } from "./ProductGrid";
 import { PropTypes } from 'prop-types';
 import { ProductForm } from "./ProductForm";
@@ -18,29 +18,33 @@ export const ProductApp = ({ title }) => {
 
     const getproducts = async () => {
         const result = await findAll();
-        setProducts(result);
+        console.log(result);
+        setProducts(result.data._embedded.products);
     }
 
     useEffect(() => {
         getproducts();
     }, []);
 
-    const handlerAddProduct = (product) => {
+    const handlerAddProduct = async (product) => {
         console.log(product);
-        
         if (product.id > 0) {
+            const response = await update(product);
             setProducts(products.map(prod => {
-                if (prod.id == product.id) {
-                    return {...product}
+                if (prod.id == response.data.id) {
+                    return {...response.data}
                 }
                 return prod;
             }));
         } else {
-            setProducts([...products, { ...product, id: new Date().getTime() }]);
+            const response = await create(product);
+            setProducts([...products, { ...response.data }]);//!checar ka funcion agregar producto
         }
     }
+
     const handlerRemoveProduct = (id) => {
         console.log(id);
+        remove(id);
         setProducts(products.filter(product => product.id != id));
     }
 

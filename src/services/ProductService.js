@@ -15,7 +15,7 @@ const initProducts = [
     }
 ];
 
-const baseUrl = "htpp://localhost:8080/products";
+const baseUrl = "http://localhost:8080/products";
 export const listProduct = () => {
     return initProducts;
 }
@@ -29,4 +29,40 @@ export const findAll = async () => {
         console.log(error);
     }
     return null;
+}
+
+export const create = async ({ name, description, price }) =>{
+    try {
+        const response = await axios.post(baseUrl, {
+            name: name,
+            description: description,
+            price: price
+        });
+        return response;      
+    } catch (error) {
+        console.log(error);
+    }
+    return undefined;
+}
+
+export const update = async ({ id,name, description, price }) =>{
+    try {
+        const response = await axios.put(baseUrl + '/' + id, {
+            name: name,
+            description: description,
+            price: price
+        });
+        return response;      
+    } catch (error) {
+        console.log(error);
+    }
+    return undefined;
+}
+
+export const remove = async (id) => {
+    try {
+        await axios.delete(baseUrl + '/' + id);
+    } catch (error) {
+        console.log(error);
+    }
 }
